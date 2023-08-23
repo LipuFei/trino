@@ -46,6 +46,8 @@ public class MongoClientConfig
     private String implicitRowFieldPrefix = "_pos";
     private boolean projectionPushDownEnabled = true;
 
+    private boolean enableCollation = true;
+
     @NotNull
     public String getSchemaCollection()
     {
@@ -249,6 +251,19 @@ public class MongoClientConfig
     public MongoClientConfig setProjectionPushdownEnabled(boolean projectionPushDownEnabled)
     {
         this.projectionPushDownEnabled = projectionPushDownEnabled;
+        return this;
+    }
+
+    public boolean getEnableCollation()
+    {
+        return this.enableCollation;
+    }
+
+    @Config("mongodb.enable-collation")
+    @ConfigDescription("Enable collation for queries. For AWS DocumentDB, collation is not supported, so it has to be turned off")
+    public MongoClientConfig setEnableCollation(boolean enableCollation)
+    {
+        this.enableCollation = enableCollation;
         return this;
     }
 }

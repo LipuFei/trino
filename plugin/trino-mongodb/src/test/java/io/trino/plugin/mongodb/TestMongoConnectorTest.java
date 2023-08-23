@@ -885,6 +885,19 @@ public class TestMongoConnectorTest
     }
 
     @Test
+    public void testDisableCollation()
+    {
+        String tableName = "test_disable_collation" + randomNameSuffix();
+        Collation collation = Collation.builder().locale("en_US").collationStrength(PRIMARY).build();
+        client.getDatabase("test").createCollection(tableName, new CreateCollectionOptions().collation(collation));
+        client.getDatabase("test").getCollection(tableName)
+                .insertMany(ImmutableList.of(new Document("text", "e"), new Document("text", "é")));
+
+        assertQuery("SELECT * FROM test." + tableName + " WHERE text = 'e'", "VALUES 'e'");
+        assertUpdate("DROP TABLE test." + tableName);
+    }
+
+    @Test
     public void testCollationAccent()
     {
         String tableName = "test_collation_accent" + randomNameSuffix();
